@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philippine History Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #F5C518;
+    --sun-deep: #E0A800;
+    --blood: #C0392B;
+    --blood-dark: #922B21;
+    --blue: #1A3A5C;
+    --blue-light: #2E5F8A;
+    --cream: #FDF6E3;
+    --cream-dark: #F0E6C8;
+    --ink: #1C1208;
+    --correct: #27ae60;
+    --wrong: #c0392b;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--blue);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Sun rays background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    height: 200vw;
+    background: conic-gradient(
+      from 0deg,
+      rgba(245,197,24,0.06) 0deg, rgba(245,197,24,0.06) 6deg,
+      transparent 6deg, transparent 12deg,
+      rgba(245,197,24,0.06) 12deg, rgba(245,197,24,0.06) 18deg,
+      transparent 18deg, transparent 24deg,
+      rgba(245,197,24,0.06) 24deg, rgba(245,197,24,0.06) 30deg,
+      transparent 30deg, transparent 36deg,
+      rgba(245,197,24,0.06) 36deg, rgba(245,197,24,0.06) 42deg,
+      transparent 42deg, transparent 48deg,
+      rgba(245,197,24,0.06) 48deg, rgba(245,197,24,0.06) 54deg,
+      transparent 54deg, transparent 60deg,
+      rgba(245,197,24,0.06) 60deg, rgba(245,197,24,0.06) 66deg,
+      transparent 66deg, transparent 72deg,
+      rgba(245,197,24,0.06) 72deg, rgba(245,197,24,0.06) 78deg,
+      transparent 78deg, transparent 84deg,
+      rgba(245,197,24,0.06) 84deg, rgba(245,197,24,0.06) 90deg,
+      transparent 90deg, transparent 180deg,
+      rgba(245,197,24,0.06) 180deg, rgba(245,197,24,0.06) 186deg,
+      transparent 186deg, transparent 192deg,
+      rgba(245,197,24,0.06) 192deg, rgba(245,197,24,0.06) 198deg,
+      transparent 198deg, transparent 204deg,
+      rgba(245,197,24,0.06) 204deg, rgba(245,197,24,0.06) 210deg,
+      transparent 210deg, transparent 216deg,
+      rgba(245,197,24,0.06) 216deg, rgba(245,197,24,0.06) 222deg,
+      transparent 222deg, transparent 228deg,
+      rgba(245,197,24,0.06) 228deg, rgba(245,197,24,0.06) 234deg,
+      transparent 234deg, transparent 240deg,
+      rgba(245,197,24,0.06) 240deg, rgba(245,197,24,0.06) 246deg,
+      transparent 246deg, transparent 252deg,
+      rgba(245,197,24,0.06) 252deg, rgba(245,197,24,0.06) 258deg,
+      transparent 258deg, transparent 264deg,
+      rgba(245,197,24,0.06) 264deg, rgba(245,197,24,0.06) 270deg,
+      transparent 270deg
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 780px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 30px 0 20px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .header-flag {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .flag-bar {
+    height: 8px;
+    border-radius: 4px;
+  }
+  .flag-bar.blue { background: var(--blue-light); width: 60px; }
+  .flag-bar.red { background: var(--blood); width: 60px; }
+  .flag-bar.sun { background: var(--sun); width: 20px; }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
+    color: var(--sun);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 20px rgba(245,197,24,0.3);
+  }
+
+  .header p {
+    color: rgba(253,246,227,0.6);
+    font-size: 0.9rem;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .progress-bar-outer {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sun), var(--blood));
+    border-radius: 100px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    color: var(--sun);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  .score-badge {
+    background: rgba(245,197,24,0.15);
+    border: 1px solid rgba(245,197,24,0.3);
+    color: var(--sun);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 28px 30px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(245,197,24,0.15);
+    animation: slideUp 0.4s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue), var(--blood), var(--sun));
+  }
+
+  .question-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--blood);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  /* OPTIONS */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+    animation: slideUp 0.4s 0.05s ease both;
+  }
+
+  @media (max-width: 520px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .option-btn {
+    background: rgba(253,246,227,0.92);
+    border: 2px solid rgba(26,58,92,0.15);
+    border-radius: 10px;
+    padding: 13px 16px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.92rem;
+    color: var(--ink);
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    background: var(--cream-dark);
+    border-color: var(--blue-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .option-btn.correct {
+    background: rgba(39,174,96,0.12);
+    border-color: var(--correct);
+    color: #1a5c35;
+  }
+
+  .option-btn.wrong {
+    background: rgba(192,57,43,0.1);
+    border-color: var(--wrong);
+    color: var(--blood-dark);
+  }
+
+  .option-btn.reveal {
+    background: rgba(39,174,96,0.07);
+    border-color: rgba(39,174,96,0.4);
+  }
+
+  .option-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    background: var(--blue);
+    color: var(--sun);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .option-btn.correct .option-letter { background: var(--correct); color: white; }
+  .option-btn.wrong .option-letter { background: var(--wrong); color: white; }
+  .option-btn.reveal .option-letter { background: var(--correct); color: white; }
+
+  /* FEEDBACK */
+  .feedback {
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .feedback.correct {
+    display: block;
+    background: rgba(39,174,96,0.12);
+    border-left: 4px solid var(--correct);
+    color: #1a5c35;
+  }
+
+  .feedback.wrong {
+    display: block;
+    background: rgba(192,57,43,0.08);
+    border-left: 4px solid var(--wrong);
+    color: var(--blood-dark);
+  }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    animation: slideUp 0.4s 0.1s ease both;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 10px;
+    padding: 11px 24px;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blood), var(--blood-dark));
+    color: white;
+    box-shadow: 0 4px 14px rgba(192,57,43,0.4);
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(192,57,43,0.5); }
+  .btn-primary:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.08);
+    color: var(--cream);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .btn-secondary:hover { background: rgba(255,255,255,0.14); }
+
+  /* RESULT SCREEN */
+  .result-screen {
+    display: none;
+    text-align: center;
+    animation: slideUp 0.5s ease both;
+  }
+
+  .result-screen.show { display: block; }
+
+  .result-card {
+    background: var(--cream);
+    border-radius: 20px;
+    padding: 40px 30px;
+    margin-top: 20px;
+    box-shadow: 0 12px 50px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--blue), var(--blood), var(--sun));
+  }
+
+  .result-emoji { font-size: 4rem; margin-bottom: 10px; }
+
+  .result-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: var(--blood);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .result-total {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 6px;
+  }
+
+  .result-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  .result-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .breakdown-item {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 20px;
+    min-width: 100px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .breakdown-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .breakdown-label { font-size: 0.78rem; color: #888; margin-top: 2px; }
+
+  .breakdown-item.correct .breakdown-num { color: var(--correct); }
+  .breakdown-item.wrong .breakdown-num { color: var(--wrong); }
+  .breakdown-item.pct .breakdown-num { color: var(--blue); }
+
+  /* QUIZ SCREEN */
+  .quiz-screen { width: 100%; }
+
+  /* SETTINGS BAR */
+  .settings-bar {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+
+  .mode-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--cream);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .mode-btn.active, .mode-btn:hover {
+    background: var(--sun);
+    color: var(--ink);
+    border-color: var(--sun);
+    font-weight: 600;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+
+  .pop { animation: pop 0.25s ease; }
+
+  /* START SCREEN */
+  .start-screen {
+    text-align: center;
+    padding: 20px 0;
+    animation: slideUp 0.5s ease both;
+  }
+
+  .start-card {
+    background: var(--cream);
+    border-radius: 20px;
+    padding: 36px 28px;
+    box-shadow: 0 12px 50px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .start-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--blue), var(--blood), var(--sun));
+  }
+
+  .start-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .start-card p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .start-options {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .start-opt {
+    background: white;
+    border: 2px solid var(--cream-dark);
+    border-radius: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 120px;
+  }
+
+  .start-opt:hover, .start-opt.selected {
+    border-color: var(--blood);
+    background: rgba(192,57,43,0.05);
+  }
+
+  .start-opt.selected { border-color: var(--blood); }
+
+  .start-opt-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--blood);
+  }
+
+  .start-opt-label { font-size: 0.78rem; color: #888; margin-top: 2px; }
+
+  .btn-start {
+    background: linear-gradient(135deg, var(--blood), var(--blood-dark));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(192,57,43,0.4);
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(192,57,43,0.5); }
+
+  .answer-key-toggle {
+    margin-top: 14px;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.78rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .answer-key-toggle:hover { color: var(--sun); }
+
+  /* REVIEW SCREEN */
+  .review-screen {
+    display: none;
+  }
+
+  .review-screen.show { display: block; }
+
+  .review-item {
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    border-left: 4px solid transparent;
+    font-size: 0.88rem;
+    color: var(--ink);
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .review-item.correct-item { border-color: var(--correct); }
+  .review-item.wrong-item { border-color: var(--wrong); }
+
+  .review-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .review-qnum {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .review-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .review-tag.c { background: rgba(39,174,96,0.15); color: var(--correct); }
+  .review-tag.w { background: rgba(192,57,43,0.12); color: var(--wrong); }
+
+  .review-answer { margin-top: 4px; font-size: 0.82rem; color: #555; }
+  .review-answer span { font-weight: 600; }
+  .review-answer .your { color: var(--wrong); }
+  .review-answer .correct-ans { color: var(--correct); }
+
+  .review-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    color: var(--cream);
+  }
+
+  .review-header-bar h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--sun);
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 6px;
+  }
+
+  .filter-tab {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.6);
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-tab.active {
+    background: var(--sun);
+    color: var(--ink);
+    border-color: var(--sun);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-flag">
+      <div class="flag-bar blue"></div>
+      <div class="flag-bar sun"></div>
+      <div class="flag-bar red"></div>
+    </div>
+    <h1>Philippine History & Government</h1>
+    <p>College of Arts and Sciences — 1st Semester, SY 2024–2025</p>
+  </div>
+
+  <!-- START SCREEN -->
+  <div class="start-screen" id="startScreen">
+    <div class="start-card">
+      <h2>Ready to Review?</h2>
+      <p>50 questions covering Philippine constitutions, history, taxation, and agrarian reform. Choose how many questions to practice per session.</p>
+      <div class="start-options">
+        <div class="start-opt selected" onclick="selectCount(10, this)">
+          <div class="start-opt-num">10</div>
+          <div class="start-opt-label">Quick Quiz</div>
+        </div>
+        <div class="start-opt" onclick="selectCount(25, this)">
+          <div class="start-opt-num">25</div>
+          <div class="start-opt-label">Half Deck</div>
+        </div>
+        <div class="start-opt" onclick="selectCount(50, this)">
+          <div class="start-opt-num">50</div>
+          <div class="start-opt-label">Full Exam</div>
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:18px;font-size:0.88rem;color:#555;cursor:pointer;">
+        <input type="checkbox" id="shuffleCheck" checked style="accent-color:var(--blood);width:15px;height:15px;">
+        Shuffle questions
+      </label>
+      <button class="btn-start" onclick="startQuiz()">▶ Begin Quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="quiz-screen" id="quizScreen" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
+      </div>
+      <div class="progress-text" id="progressText">1 / 50</div>
+      <div class="score-badge" id="scoreBadge">Score: 0</div>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <div class="question-num" id="questionNum">Question 1</div>
+      <div class="question-text" id="questionText"></div>
+    </div>
+
+    <div class="options-grid" id="optionsGrid"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="controls">
+      <button class="btn btn-secondary" onclick="skipQuestion()" id="skipBtn">Skip ›</button>
+      <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn" disabled>Next ›</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="result-screen" id="resultScreen">
+    <div class="result-card">
+      <div class="result-emoji" id="resultEmoji">🌟</div>
+      <div class="result-score" id="resultScore">0</div>
+      <div class="result-total" id="resultTotal">out of 50</div>
+      <div class="result-label" id="resultLabel">Good Job!</div>
+      <div class="result-breakdown">
+        <div class="breakdown-item correct">
+          <div class="breakdown-num" id="bdCorrect">0</div>
+          <div class="breakdown-label">Correct</div>
+        </div>
+        <div class="breakdown-item wrong">
+          <div class="breakdown-num" id="bdWrong">0</div>
+          <div class="breakdown-label">Wrong</div>
+        </div>
+        <div class="breakdown-item pct">
+          <div class="breakdown-num" id="bdPct">0%</div>
+          <div class="breakdown-label">Score</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+        <button class="btn btn-primary" onclick="restartQuiz()">↺ Try Again</button>
+        <button class="btn btn-secondary" onclick="showReview()" style="background:rgba(26,58,92,0.8);border-color:var(--blue-light);">Review Answers</button>
+        <button class="btn btn-secondary" onclick="goHome()" style="background:rgba(245,197,24,0.15);border-color:var(--sun);color:var(--sun);">◎ New Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW SCREEN -->
+  <div class="review-screen" id="reviewScreen">
+    <div class="review-header-bar">
+      <h3>Answer Review</h3>
+      <div class="filter-tabs">
+        <div class="filter-tab active" onclick="filterReview('all', this)">All</div>
+        <div class="filter-tab" onclick="filterReview('wrong', this)">Wrong</div>
+        <div class="filter-tab" onclick="filterReview('correct', this)">Correct</div>
+      </div>
+    </div>
+    <div id="reviewList"></div>
+    <div style="text-align:center;margin-top:16px;">
+      <button class="btn btn-primary" onclick="restartQuiz()">↺ Try Again</button>
+      <button class="btn btn-secondary" onclick="goHome()" style="margin-left:10px;background:rgba(245,197,24,0.15);border-color:var(--sun);color:var(--sun);">◎ New Session</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  {
+    id: 1,
+    q: "Arrange the following constitutions chronologically:\n1. Malolos Constitution\n2. Biak-na-Bato Constitution\n3. Constitution during the Japanese occupation\n4. Constitution during the Commonwealth period",
+    opts: ["1234","2134","2143","1243"],
+    ans: 1
+  },
+  {
+    id: 2,
+    q: "An agreement where Spain had handed over the control of the Philippines, Guam, and Puerto Rico to the US for 20 million USD.",
+    opts: ["Treaty of Tordesillas","Treaty of Westphalia","Treaty of Paris","Treaty of Alliance"],
+    ans: 2
+  },
+  {
+    id: 3,
+    q: "A war that ended after Aguinaldo was captured on March 23, 1901.",
+    opts: ["Filipino-American War","Spanish-American War","Filipino-Spanish War","Filipino-Japanese War"],
+    ans: 0
+  },
+  {
+    id: 4,
+    q: "Which Philippine constitution is also called the Political Constitution of 1899?",
+    opts: ["Constitution of Biak-na-Bato","The Freedom Constitution","Malolos Constitution","The Constitution of Puppet Republic"],
+    ans: 2
+  },
+  {
+    id: 5,
+    q: "Which version of the Philippine Constitution was amended four times by the same President?",
+    opts: ["The 1943 Constitution","The 1986 Constitution","The 1987 Constitution","The 1973 Constitution"],
+    ans: 3
+  },
+  {
+    id: 6,
+    q: "A Constitution that backed-up the Japanese occupation in the country.",
+    opts: ["The 1935 Constitution","The 1986 Constitution","The 1973 Constitution","The 1943 Constitution"],
+    ans: 3
+  },
+  {
+    id: 7,
+    q: "The following statements are TRUE about the Biak-na-Bato Constitution EXCEPT:",
+    opts: ["It was based on Cuban Constitution.","It seeks for representation of the Philippines in the Spanish Cortes.","It promotes equality for all before the law.","It was modeled after the US Constitution."],
+    ans: 3
+  },
+  {
+    id: 8,
+    q: "Which Philippine Constitution provided the basis of Commonwealth government?",
+    opts: ["The 1943 Constitution","The 1973 Constitution","The 1935 Constitution","The 1986 Constitution"],
+    ans: 2
+  },
+  {
+    id: 9,
+    q: "Proclamation 1081 means ______.",
+    opts: ["Anti-graft and Corrupt practices","Martial Law","Plunder","Excise Tax Law"],
+    ans: 1
+  },
+  {
+    id: 10,
+    q: "Which amendment of the 1973 Constitution had extended the retirement of the judiciary members to 70 years old?",
+    opts: ["1976","1980","1981","1984"],
+    ans: 1
+  },
+  {
+    id: 11,
+    q: "The Second Organic Act or The Philippine Organic Act of 1916 is also called ______.",
+    opts: ["Jones Law","Tydings-McDuffie Law","Bell Trade Law","William-Howard Taft Law"],
+    ans: 0
+  },
+  {
+    id: 12,
+    q: "Under which Philippine Commission was the Philippine Constabulary created?",
+    opts: ["First Philippine Commission","Second Philippine Commission","Third Philippine Commission","Fourth Philippine Commission"],
+    ans: 1
+  },
+  {
+    id: 13,
+    q: "Under which Philippine Organic Act was the Legislative Branch given to the Filipino control?",
+    opts: ["First Philippine Organic Act","Third Philippine Organic Act","Second Philippine Organic Act","Fourth Philippine Organic Act"],
+    ans: 2
+  },
+  {
+    id: 14,
+    q: "The other term for Philippine Trade Act is ______.",
+    opts: ["Bell Trade Act","Jones Act","Tydings-McDuffie Act","Philippine Organic Act"],
+    ans: 0
+  },
+  {
+    id: 15,
+    q: "Which Philippine Constitution was not recognized by the US and Commonwealth government?",
+    opts: ["The 1943 Constitution","The 1973 Constitution","The 1935 Constitution","The 1987 Constitution"],
+    ans: 0
+  },
+  {
+    id: 16,
+    q: "Arrange the following amendments of the 1973 constitution chronologically:\n1. The executive power was restored to the President.\n2. The President was also the Prime Minister with legislative power.\n3. The executive committee was abolished and the position of VP was restored.\n4. The retirement age of the judiciary members is extended to 70 years old.",
+    opts: ["1324","2413","4132","3421"],
+    ans: 1
+  },
+  {
+    id: 17,
+    q: "Arrange the following Acts during the American presence in the Philippines chronologically:\n1. Tydings-McDuffie Act\n2. Bell Trade Act\n3. Philippine Organic Act of 1902\n4. Jones Act",
+    opts: ["3421","3241","3412","3143"],
+    ans: 2
+  },
+  {
+    id: 18,
+    q: "Arrange the following Philippine Presidents chronologically:\n1. Pres. Ramon Magsaysay\n2. Pres. Carlos Garcia\n3. Pres. Elpidio Quirino\n4. Pres. Diosdado Macapagal",
+    opts: ["3124","2134","1234","1324"],
+    ans: 0
+  },
+  {
+    id: 19,
+    q: "Arrange the following Philippine Presidents chronologically:\n1. Pres. Corazon Aquino\n2. Pres. Manuel Roxas\n3. Pres. Jose Laurel\n4. Pres. Ferdinand Marcos Sr",
+    opts: ["2341","3421","3214","3241"],
+    ans: 3
+  },
+  {
+    id: 20,
+    q: "The following conditions were adopted during the 1935 Philippine Constitution EXCEPT:",
+    opts: ["The Philippine Congress was closed.","The Philippine President's term was four (4) years with reelection.","It provided the legal basis of the Commonwealth government.","It provided the basis of the bicameral legislature."],
+    ans: 0
+  },
+  {
+    id: 21,
+    q: "The following group of people were exempted for polo y servicios EXCEPT:",
+    opts: ["Gobernadorcillo","Principalia","Polista","Cabeza de Barangay"],
+    ans: 2
+  },
+  {
+    id: 22,
+    q: "The money for this type of tax during the Spanish period was used for church construction and purchase of materials for religious celebrations.",
+    opts: ["Donativo","Sanctorum","Caja de Comunidad","Tributo"],
+    ans: 1
+  },
+  {
+    id: 23,
+    q: "The first native revolt against the hated tribute and the corrupt tribute collectors.",
+    opts: ["Cagayan and Dingras Revolts","Andres Malong Revolt","Agustin Sumuroy's Revolt","None of the option is correct."],
+    ans: 0
+  },
+  {
+    id: 24,
+    q: "The known revolt against Spanish taxation by the Kapampangans.",
+    opts: ["Francisco Maniago's Revolt","Andres Malong Revolt","Agustin Sumuroy's Revolt","None of the option is correct."],
+    ans: 0
+  },
+  {
+    id: 25,
+    q: "A general tax paid by the Filipinos to Spain which amounted to eight reales.",
+    opts: ["Donativo","Sanctorum","Caja de Comunidad","Tributo"],
+    ans: 3
+  },
+  {
+    id: 26,
+    q: "A tax for the military campaign of the government.",
+    opts: ["Donativo","Sanctorum","Caja de Comunidad","Tributo"],
+    ans: 0
+  },
+  {
+    id: 27,
+    q: "A tax for the incurred expenses of the town in the construction of infrastructure projects.",
+    opts: ["Donativo","Sanctorum","Caja de Comunidad","Tributo"],
+    ans: 2
+  },
+  {
+    id: 28,
+    q: "The Pope who granted Ferdinand and Isabella and their successors the right to collect and retain the tithes and other church dues in all their possessions beyond the seas.",
+    opts: ["Pope Alexander VI","Pope John XXIII","Pope Benedict XVI","Pope Leo III"],
+    ans: 0
+  },
+  {
+    id: 29,
+    q: "The following reasons for paying taxes are correct EXCEPT:",
+    opts: ["Recognition of the sovereignty of Spain over the colonies.","Accepting the idea of being a subject and vassal to Spain.","To defray expenses of pacification and governance.","To ensure spiritual growth."],
+    ans: 3
+  },
+  {
+    id: 30,
+    q: "The following statements about the 1884 tax reform are true EXCEPT:",
+    opts: ["It removed the polo y servicios as annual obligation of the people.","It abolished the hated tribute and replaced it with cedula.","It reduced the 40-day annual forced labor to 15 days.","The tax reform was provided by the Royal Decree of March 6, 1884."],
+    ans: 0
+  },
+  {
+    id: 31,
+    q: "The following group of people were required to obtain a cedula after the 1884 tax reform EXCEPT:",
+    opts: ["Spaniards","Natives","Foreigners","Chinese"],
+    ans: 0
+  },
+  {
+    id: 32,
+    q: "Which of the following group of people is exempted to pay the tribute?",
+    opts: ["Carpenters","18–50 years old","Town workers","60 years old and above"],
+    ans: 3
+  },
+  {
+    id: 33,
+    q: "Which of the following statements is not TRUE during the 1943 Constitution?",
+    opts: ["Benigno Aquino Sr was the House Speaker.","Authoritarian.","The Prime Minister was the head of the Cabinet.","This was the period of Japanese occupation."],
+    ans: 2
+  },
+  {
+    id: 34,
+    q: "Which of the following statements is not TRUE about the 1987 Constitution?",
+    opts: ["It was ratified on February 8, 1987.","It was drafted during the Aquino administration.","It is used until now.","It was drafted by the Congress."],
+    ans: 3
+  },
+  {
+    id: 35,
+    q: "The following conditions were TRUE during the Second Philippine Commission EXCEPT:",
+    opts: ["Establishment of the Legislative House.","Creation of the Judicial System.","Creation of the Philippine Constabulary.","It happened on March 16, 1900."],
+    ans: 0
+  },
+  {
+    id: 36,
+    q: "The system of giving lands to the Spanish conquerors that were loyal to the Spanish monarch.",
+    opts: ["Encomienda","Hacienda","Feudal","Repartimiento"],
+    ans: 0
+  },
+  {
+    id: 37,
+    q: "The loyal Spanish conqueror who received a land from the Spanish monarch.",
+    opts: ["Repartimiento","Feudal","Haciendero","Encomendero"],
+    ans: 3
+  },
+  {
+    id: 38,
+    q: "Who was the president of the first Philippine republic?",
+    opts: ["Emilio Aguinaldo","Manuel Roxas","Jose Laurel","Ferdinand Marcos Sr"],
+    ans: 0
+  },
+  {
+    id: 39,
+    q: "Which of the following Land Registration Act was not part of the American Period in the Philippines?",
+    opts: ["Land Registration Act of 1902","Tenancy Act of 1933","Public Land Act of 1903","Republic Act No. 55"],
+    ans: 3
+  },
+  {
+    id: 40,
+    q: "Arrange the following amendments during the Commonwealth period chronologically:\n1. Commonwealth Act No. 178 (Rice Tenancy Act No. 4045)\n2. Commonwealth Act No. 441 (Specified reason for tenant dismissal)\n3. Commonwealth Act No. 461 (Creation of National Settlement Administration)",
+    opts: ["123","321","132","312"],
+    ans: 0
+  },
+  {
+    id: 41,
+    q: "Arrange the following laws enacted by Pres. Ramon Magsaysay:\n1. RA No. 1160 (Establishment of Nat'l Resettlement and Rehabilitation Adm.)\n2. RA No. 1199 (Agricultural Tenancy Act)\n3. RA No. 1400 (Land Reform Act)",
+    opts: ["123","321","132","312"],
+    ans: 0
+  },
+  {
+    id: 42,
+    q: "The Philippine President who created the Department of Agrarian Reform.",
+    opts: ["Ramon Magsaysay","Corazon Aquino","Diosdado Macapagal","Ferdinand Marcos Sr"],
+    ans: 3
+  },
+  {
+    id: 43,
+    q: "CARP or Comprehensive Agrarian Reform Program was instituted under President ______.",
+    opts: ["Ramon Magsaysay","Corazon Aquino","Diosdado Macapagal","Ferdinand Marcos Sr"],
+    ans: 1
+  },
+  {
+    id: 44,
+    q: "The Philippine President who signed EO No. 379 of 2004 transforming the Department of Agrarian Reform to Department of Land Reform.",
+    opts: ["Joseph Estrada","Gloria Macapagal-Arroyo","Benigno Aquino III","Rodrigo Duterte"],
+    ans: 1
+  },
+  {
+    id: 45,
+    q: "Which slogan for Agri-sector was promoted by Pres. Joseph Estrada?",
+    opts: ["Kapit Bisig Laban sa Kahirapan","Agrikulturang Maka Masa","Kilusang Bagong Lipunan","None of the option is correct."],
+    ans: 1
+  },
+  {
+    id: 46,
+    q: "The following Philippine Presidents made use of the CARP during their tenure EXCEPT:",
+    opts: ["Fidel Ramos","Corazon Aquino","Joseph Estrada","Ferdinand Marcos Sr"],
+    ans: 3
+  },
+  {
+    id: 47,
+    q: "Republic Act No. 6657 also known as ______.",
+    opts: ["Comprehensive Agrarian Reform Law","Creation of Department of Agrarian","Establishment of Department of Land Reform","None of the option is correct."],
+    ans: 0
+  },
+  {
+    id: 48,
+    q: "Which of the following Philippine Presidents advocated the National Resettlement program for rebel returnees?",
+    opts: ["Ramon Magsaysay","Corazon Aquino","Diosdado Macapagal","Ferdinand Marcos Sr"],
+    ans: 0
+  },
+  {
+    id: 49,
+    q: "Which version of the Philippine constitution has been used and guided the administration of the majority of the Philippine Presidents?",
+    opts: ["The 1935 Constitution","The 1973 Constitution","The 1946 Constitution","The 1987 Constitution"],
+    ans: 0
+  },
+  {
+    id: 50,
+    q: "Which of the following statements is TRUE about the Philippine Trade Act/Bell Trade Act of 1946?",
+    opts: ["The US citizens have no economic rights to exploit the Philippine natural resources.","The Filipino citizens have no economic rights to exploit the Philippine natural resources.","The US citizens have equal economic rights with the Filipinos to exploit Philippine natural resources.","None of the choices is correct."],
+    ans: 2
+  }
+];
+
+const LETTERS = ['a','b','c','d'];
+
+let sessionQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = 0;
+let userAnswers = [];
+let selectedCount = 10;
+let answered_flags = [];
+
+function selectCount(n, el) {
+  selectedCount = n;
+  document.querySelectorAll('.start-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  const doShuffle = document.getElementById('shuffleCheck').checked;
+  let pool = doShuffle ? shuffle(ALL_QUESTIONS) : [...ALL_QUESTIONS];
+  sessionQuestions = pool.slice(0, selectedCount);
+  currentIndex = 0;
+  score = 0;
+  answered = 0;
+  userAnswers = new Array(selectedCount).fill(null);
+  answered_flags = new Array(selectedCount).fill(false);
+
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'block';
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('reviewScreen').classList.remove('show');
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = sessionQuestions[currentIndex];
+  const total = sessionQuestions.length;
+
+  document.getElementById('questionNum').textContent = `Question ${currentIndex + 1} of ${total}`;
+  document.getElementById('questionText').textContent = q.q;
+
+  const pct = (currentIndex / total) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('scoreBadge').textContent = `Score: ${score}`;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${LETTERS[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    if (answered_flags[currentIndex]) {
+      btn.disabled = true;
+      const ua = userAnswers[currentIndex];
+      if (i === q.ans) btn.classList.add('reveal');
+      if (ua === i && ua !== q.ans) btn.classList.add('wrong');
+      if (ua === i && ua === q.ans) btn.classList.add('correct');
+    }
+    grid.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+
+  if (answered_flags[currentIndex]) {
+    const ua = userAnswers[currentIndex];
+    if (ua === q.ans) {
+      fb.classList.add('correct');
+      fb.textContent = '✓ Correct!';
+    } else if (ua === null) {
+      fb.classList.add('wrong');
+      fb.textContent = `Skipped. Correct answer: (${LETTERS[q.ans]}) ${q.opts[q.ans]}`;
+    } else {
+      fb.classList.add('wrong');
+      fb.textContent = `✗ Wrong. Correct answer: (${LETTERS[q.ans]}) ${q.opts[q.ans]}`;
+    }
+  }
+
+  document.getElementById('nextBtn').disabled = !answered_flags[currentIndex];
+  document.getElementById('skipBtn').disabled = answered_flags[currentIndex];
+
+  // animate card
+  const card = document.getElementById('questionCard');
+  card.classList.remove('pop');
+  void card.offsetWidth;
+  card.classList.add('pop');
+}
+
+function selectAnswer(idx) {
+  if (answered_flags[currentIndex]) return;
+
+  const q = sessionQuestions[currentIndex];
+  userAnswers[currentIndex] = idx;
+  answered_flags[currentIndex] = true;
+  answered++;
+
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    if (i === idx && idx !== q.ans) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (idx === q.ans) {
+    score++;
+    fb.classList.add('correct');
+    fb.textContent = '✓ Correct!';
+  } else {
+    fb.classList.add('wrong');
+    fb.textContent = `✗ Wrong. Correct answer: (${LETTERS[q.ans]}) ${q.opts[q.ans]}`;
+  }
+
+  document.getElementById('scoreBadge').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').disabled = false;
+  document.getElementById('skipBtn').disabled = true;
+}
+
+function skipQuestion() {
+  if (answered_flags[currentIndex]) return;
+  answered_flags[currentIndex] = true;
+  userAnswers[currentIndex] = null;
+
+  const q = sessionQuestions[currentIndex];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('reveal');
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.classList.add('wrong');
+  fb.textContent = `Skipped. Correct answer: (${LETTERS[q.ans]}) ${q.opts[q.ans]}`;
+
+  document.getElementById('nextBtn').disabled = false;
+  document.getElementById('skipBtn').disabled = true;
+}
+
+function nextQuestion() {
+  if (currentIndex < sessionQuestions.length - 1) {
+    currentIndex++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quizScreen').style.display = 'none';
+  const total = sessionQuestions.length;
+  const pct = Math.round((score / total) * 100);
+
+  let emoji = '😔', label = 'Keep studying!';
+  if (pct >= 90) { emoji = '🏆'; label = 'Excellent! Mabuhay!'; }
+  else if (pct >= 80) { emoji = '🌟'; label = 'Great Job!'; }
+  else if (pct >= 70) { emoji = '👍'; label = 'Good Work!'; }
+  else if (pct >= 60) { emoji = '📚'; label = 'Almost there!'; }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultScore').textContent = score;
+  document.getElementById('resultTotal').textContent = `out of ${total}`;
+  document.getElementById('resultLabel').textContent = label;
+  document.getElementById('bdCorrect').textContent = score;
+  document.getElementById('bdWrong').textContent = total - score;
+  document.getElementById('bdPct').textContent = pct + '%';
+
+  document.getElementById('resultScreen').classList.add('show');
+}
+
+function showReview() {
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('reviewScreen').classList.add('show');
+  buildReview('all');
+}
+
+function buildReview(filter) {
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  sessionQuestions.forEach((q, i) => {
+    const ua = userAnswers[i];
+    const isCorrect = ua === q.ans;
+    const skipped = ua === null;
+
+    if (filter === 'correct' && !isCorrect) return;
+    if (filter === 'wrong' && isCorrect) return;
+
+    const div = document.createElement('div');
+    div.className = `review-item ${isCorrect ? 'correct-item' : 'wrong-item'}`;
+
+    let answerLine = '';
+    if (skipped) {
+      answerLine = `<div class="review-answer">Skipped. <span class="correct-ans">Correct: (${LETTERS[q.ans]}) ${q.opts[q.ans]}</span></div>`;
+    } else if (isCorrect) {
+      answerLine = `<div class="review-answer"><span class="correct-ans">✓ (${LETTERS[ua]}) ${q.opts[ua]}</span></div>`;
+    } else {
+      answerLine = `<div class="review-answer"><span class="your">✗ Your answer: (${LETTERS[ua]}) ${q.opts[ua]}</span> &nbsp;|&nbsp; <span class="correct-ans">Correct: (${LETTERS[q.ans]}) ${q.opts[q.ans]}</span></div>`;
+    }
+
+    div.innerHTML = `
+      <div class="review-item-header">
+        <div><div class="review-qnum">Q${i+1} — Item ${q.id}</div><div>${q.q.split('\n')[0]}</div></div>
+        <span class="review-tag ${isCorrect ? 'c' : 'w'}">${isCorrect ? '✓' : skipped ? 'SKIP' : '✗'}</span>
+      </div>
+      ${answerLine}
+    `;
+    list.appendChild(div);
+  });
+}
+
+function filterReview(f, el) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  buildReview(f);
+}
+
+function restartQuiz() {
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('reviewScreen').classList.remove('show');
+  startQuiz();
+}
+
+function goHome() {
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('reviewScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+}
+</script>
+</body>
+</html>
